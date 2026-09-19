@@ -1,1 +1,67 @@
-<!doctype html><html lang="ca"><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=examples/apple-pencil-latency.html"><title>Signature Pad Pressure</title><a href="examples/apple-pencil-latency.html">Obre la demo Apple Pencil</a></html>
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Signature Pad Pressure demo</title>
+  <meta name="description"
+    content="Signature Pad Pressure — smooth signatures with pressure-sensitive strokes and low latency.">
+
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1">
+
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <link rel="stylesheet" href="css/signature-pad.css">
+
+</head>
+
+<body onselectstart="return false">
+  <span id="forkongithub">
+    <a href="https://github.com/aniolpages/signature_pad-pressure">View on GitHub</a>
+  </span>
+
+  <div id="signature-pad" class="signature-pad">
+    <header class="signature-pad--header">
+      <h1>Signature Pad Pressure</h1>
+      <p>Pressure-sensitive strokes · Low latency enabled</p>
+      <a href="https://aniolpages.github.io/signature_pad-pressure/examples/apple-pencil-latency.html">Apple Pencil A/B comparison</a>
+    </header>
+    <div id="canvas-wrapper" class="signature-pad--body">
+      <canvas aria-label="Draw your signature here"></canvas>
+    </div>
+    <div class="signature-pad--footer">
+      <div class="description">Sign above</div>
+
+      <div class="signature-pad--actions">
+        <div class="column">
+          <button type="button" class="button clear" data-action="clear">Clear</button>
+          <button type="button" class="button" data-action="undo" title="Ctrl-Z">Undo</button>
+          <button type="button" class="button" data-action="redo" title="Ctrl-Y">Redo</button>
+          <br/>
+          <button type="button" class="button" data-action="change-color">Change color</button>
+          <button type="button" class="button" data-action="change-width">Change width</button>
+          <button type="button" class="button" data-action="change-background-color">Change background color</button>
+
+        </div>
+        <div class="column">
+          <button type="button" class="button save" data-action="save-png">Save as PNG</button>
+          <button type="button" class="button save" data-action="save-jpg">Save as JPG</button>
+          <button type="button" class="button save" data-action="save-svg">Save as SVG</button>
+          <button type="button" class="button save" data-action="save-svg-with-background">Save as SVG with
+            background</button>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" class="button" data-action="open-in-window">Open in Window</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/signature_pad.umd.min.js"></script>
+  <script src="js/app.js"></script>
+</body>
+
+</html>
