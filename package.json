@@ -1,7 +1,7 @@
 {
   "name": "@aniolpages/signature-pad-pressure",
   "description": "Library for drawing smooth signatures.",
-  "version": "5.1.4-pressure.0",
+  "version": "5.1.4-pressure.1",
   "homepage": "https://github.com/aniolpages/signature_pad-pressure",
   "author": {
     "name": "Szymon Nowak",
@@ -10,18 +10,18 @@
   },
   "license": "MIT",
   "source": "src/signature_pad.ts",
-  "main": "dist/signature_pad.umd.js",
+  "main": "dist/signature_pad.cjs",
   "module": "dist/signature_pad.js",
   "type": "module",
   "types": "dist/types/signature_pad.d.ts",
   "exports": {
     "types": "./dist/types/signature_pad.d.ts",
     "import": "./dist/signature_pad.js",
-    "require": "./dist/signature_pad.umd.js",
+    "require": "./dist/signature_pad.cjs",
     "default": "./dist/signature_pad.umd.js"
   },
   "scripts": {
-    "build": "npm run lint && npm run clean && node esbuild.config.js && npm run emit-types && npm run update-docs",
+    "build": "npm run lint && npm run clean && node esbuild.config.js && npm run emit-types && npm run update-docs && npm run test:package",
     "clean": "del dist",
     "emit-types": "del dist/types && tsc src/signature_pad.ts --lib DOM,ES2015 --declaration --declarationDir dist/types --emitDeclarationOnly --typeRoots ./node_modules/@types --types node",
     "format": "prettier --write {src,tests}/**/*.{js,ts}",
@@ -30,11 +30,12 @@
     "serve": "serve -l 9000 docs",
     "start": "npm run build && npm run serve",
     "test": "jest --coverage",
-    "update-docs": "cpy 'dist/signature_pad.umd.min.*' docs/js"
+    "update-docs": "cpy 'dist/signature_pad.umd.min.*' docs/js",
+    "test:package": "node scripts/check-package.mjs"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/aniolpages/signature_pad-pressure.git"
+    "url": "git+https://github.com/aniolpages/signature_pad-pressure.git"
   },
   "files": [
     "src",

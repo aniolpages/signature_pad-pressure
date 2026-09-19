@@ -11,7 +11,7 @@ Initial registry publication is currently blocked by the npm account's second
 factor (`EOTP`). Until it is authorized, use the ready-built GitHub release:
 
 ```sh
-npm install https://github.com/aniolpages/signature_pad-pressure/releases/download/v5.1.4-pressure.0/aniolpages-signature-pad-pressure-5.1.4-pressure.0.tgz
+npm install https://github.com/aniolpages/signature_pad-pressure/releases/download/v5.1.4-pressure.1/aniolpages-signature-pad-pressure-5.1.4-pressure.1.tgz
 ```
 
 ## Apple Pencil / pressure-sensitive strokes
@@ -67,7 +67,7 @@ metrics. [Research, benchmarks and limitations](research/APPLE_PENCIL.md).
 Use `npm ci`, `npm test -- --runInBand`, and `npm run build`. `package-lock.json`
 is the fork's reproducible install; the untouched upstream yarn lock is retained
 for rebasing. Package: `@aniolpages/signature-pad-pressure`, version
-`5.1.4-pressure.0`, based on upstream 5.1.4. The original author and license remain.
+`5.1.4-pressure.1`, based on upstream 5.1.4. The original author and license remain.
 
 `.github/workflows/publish.yml` uses GitHub OIDC, `id-token: write`, Node 24 and npm
 12. Configure the npm package's trusted publisher with owner `aniolpages`, repository

@@ -61,3 +61,6 @@ await esbuild.build(config({
   outfile: 'dist/signature_pad.umd.js',
   minify: false,
 }));
+
+// A .cjs extension is required for Node require() inside a type:module package.
+fs.copyFileSync("dist/signature_pad.umd.js", "dist/signature_pad.cjs");

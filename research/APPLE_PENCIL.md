@@ -202,3 +202,10 @@ and docs. No new runtime dependencies. Further microbenchmark repetitions varied
 (partial readback 0.75–0.94 ms on WebKit, low-mode p95 0–1 ms at its clock
 resolution); the committed JSON files are one explicitly identified run, not a
 statistically rigorous device study.
+
+The downloadable revision `5.1.4-pressure.1` additionally fixes upstream's Node
+CommonJS entry point by supplying a `.cjs` copy of the existing UMD build.
+`npm run test:package` validates both package export conditions during every build.
+The runtime algorithm is unchanged from the measured revision. Demo metrics are
+initialized before interaction to avoid an initial layout shift on tablet-width
+WebKit. Registry publishing remains blocked by the account second factor (EOTP).

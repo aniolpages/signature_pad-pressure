@@ -90,6 +90,7 @@ function reset() {
     });
     p.stats = { count: 0, coalesced: 0, started: performance.now() };
   });
+  renderStats();
 }
 for (const [index, p] of panels.entries()) {
   const observe = (e) => {
@@ -144,14 +145,15 @@ for (const [index, p] of panels.entries()) {
   p.canvas.addEventListener('pointerdown', observe, true);
   window.addEventListener('pointermove', observe, true);
 }
-setInterval(() => {
+function renderStats() {
   for (const p of panels) {
     const s = p.stats,
       seconds = (performance.now() - s.started) / 1000;
     const n = (value) => (Number.isFinite(value) ? value.toFixed(2) : '—');
     p.output.textContent = `Pointer: ${s.type ?? '—'} · pressió ${n(s.pressure)}\nx / y: ${n(s.x)} / ${n(s.y)}\nEvent timestamp: ${n(s.timestamp)} ms\nperformance.now: ${n(s.now)} ms\nEvent → JS: ${n(s.jsDelay)} ms\nEvents/s (mitjana): ${n(s.count / seconds)}\nCoalesced/s: ${n(s.coalesced / seconds)}\nCoalesced/event: ${s.perEvent ?? 0}\nPrediccions/event: ${s.predicted ?? 0}\nHandler/dibuix CPU: ${n(s.render)} ms\nEvent → ordres Canvas: ${n(s.inputToSubmit)} ms\nInterval rAF: ${n(frame)} ms\nLong tasks: ${longTasks}\nAPIs: coalesced=${typeof window.PointerEvent?.prototype.getCoalescedEvents === 'function'}, predicted=${typeof window.PointerEvent?.prototype.getPredictedEvents === 'function'}, raw=${'onpointerrawupdate' in p.canvas}`;
   }
-}, 250);
+}
+setInterval(renderStats, 250);
 $('controls').addEventListener('change', reset);
 $('clear').onclick = reset;
 window.addEventListener('resize', reset);
