@@ -175,16 +175,45 @@ $('export').onclick = () => {
     groups: panels[2].pad.toData(),
     lastStrokeEvents: panels[2].samples,
   };
-  const url = URL.createObjectURL(new Blob([JSON.stringify(output, null, 2)], { type: 'application/json' }));
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = 'signature-pad-diagnostic.json';
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  const text = JSON.stringify(output, null, 2);
+  $('diagnostic-text').value = text;
+  const link = $('download-diagnostic');
+  if (link.hasAttribute('href')) URL.revokeObjectURL(link.href);
+  link.href = URL.createObjectURL(new Blob([text], { type: 'application/json' }));
+  $('diagnostic-status').textContent = output.groups.length
+    ? 'Dades preparades. Copia-les o descarrega el fitxer.'
+    : 'No hi ha cap traç al tercer quadre. Dibuixa-hi i torna a mostrar el diagnòstic.';
+  $('diagnostic').hidden = false;
+  $('diagnostic').scrollIntoView({ block: 'center' });
 };
-window.addEventListener('resize', reset);
+$('copy-diagnostic').onclick = async () => {
+  const text = $('diagnostic-text');
+  try {
+    await navigator.clipboard.writeText(text.value);
+    $('diagnostic-status').textContent = 'Dades copiades. Ja les pots enganxar al xat.';
+  } catch {
+    text.focus();
+    text.select();
+    text.setSelectionRange(0, text.value.length);
+    $('diagnostic-status').textContent = 'Mantén premut el text i tria «Copia» per copiar les dades manualment.';
+  }
+};
+window.addEventListener('resize', () => {
+  // Safari's browser bars can resize the viewport while scrolling to the controls.
+  // Keep the strokes and input diagnostics instead of resetting the demo.
+  const ratio = Math.max(devicePixelRatio || 1, 1);
+  for (const p of panels) {
+    for (const c of [p.canvas, p.debug]) {
+      const width = Math.round(c.clientWidth * ratio);
+      const height = Math.round(c.clientHeight * ratio);
+      if (c.width === width && c.height === height) continue;
+      c.width = width;
+      c.height = height;
+      c.getContext('2d').scale(ratio, ratio);
+      if (c === p.canvas) p.pad.redraw();
+    }
+  }
+});
 reset();
 
 function percentile(values, p) {
