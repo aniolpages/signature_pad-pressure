@@ -272,6 +272,11 @@ Demo: <https://jsfiddle.net/szimek/d6a78gwq/>
 Based on [Signature Pad](https://github.com/szimek/signature_pad) by Szymon Nowak.
 Released under the [MIT License](LICENSE).
 
+While enabled, the canvas suppresses browser touch gestures, text selection,
+callouts, context menus, dragging, wheel scrolling and click actions. `off()`
+removes these handlers. Input events still reach the drawing handlers; browser
+and operating-system gestures outside the page remain under platform control.
+
 ## Development
 
 ```sh

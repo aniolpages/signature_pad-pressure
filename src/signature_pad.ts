@@ -17,6 +17,21 @@ import { InkPreview } from './ink_preview.js';
 
 export { BasicPoint } from './point.js';
 
+const canvasDefaultEvents = [
+  'touchstart',
+  'touchmove',
+  'touchend',
+  'gesturestart',
+  'gesturechange',
+  'gestureend',
+  'selectstart',
+  'dragstart',
+  'contextmenu',
+  'click',
+  'dblclick',
+  'wheel',
+];
+
 export interface SignatureEvent {
   event: MouseEvent | TouchEvent | PointerEvent;
   type: string;
@@ -95,6 +110,11 @@ export default class SignaturePad extends SignatureEventTarget {
   private _preview?: InkPreview;
   private _sampleRect?: DOMRect;
   private _pressureObserved = false;
+  private _preventCanvasDefault = (event: Event): void => {
+    if (event.cancelable) event.preventDefault();
+    // Touch events must still reach the window's drawing handlers.
+    if (!event.type.startsWith('touch')) event.stopPropagation();
+  };
   private _ctx: CanvasRenderingContext2D;
   private _drawingStroke = false;
   private _isEmpty = true;
@@ -266,6 +286,12 @@ export default class SignaturePad extends SignatureEventTarget {
     // Safari does not support userSelect property without a prefix even as of iOS 26
     // https://caniuse.com/?search=user-select
     this.canvas.style.webkitUserSelect = 'none';
+    this.canvas.style.setProperty('-webkit-touch-callout', 'none');
+    for (const type of canvasDefaultEvents) {
+      this.canvas.addEventListener(type, this._preventCanvasDefault, {
+        passive: false,
+      });
+    }
 
     const isIOS =
       /Macintosh/.test(navigator.userAgent) && 'ontouchstart' in document;
@@ -298,6 +324,10 @@ export default class SignaturePad extends SignatureEventTarget {
     ).msTouchAction = 'auto';
     this.canvas.style.userSelect = 'auto';
     this.canvas.style.webkitUserSelect = 'auto';
+    this.canvas.style.removeProperty('-webkit-touch-callout');
+    for (const type of canvasDefaultEvents) {
+      this.canvas.removeEventListener(type, this._preventCanvasDefault);
+    }
 
     this.canvas.removeEventListener('pointerdown', this._handlePointerDown);
     this.canvas.removeEventListener('mousedown', this._handleMouseDown);

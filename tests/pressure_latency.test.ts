@@ -427,3 +427,47 @@ describe('legacy touch and preview lifecycle', () => {
     expect(stroke).not.toHaveBeenCalled();
   });
 });
+
+describe('canvas browser gestures', () => {
+  it.each([
+    'touchstart',
+    'touchmove',
+    'touchend',
+    'gesturestart',
+    'gesturechange',
+    'gestureend',
+    'selectstart',
+    'dragstart',
+    'contextmenu',
+    'click',
+    'dblclick',
+    'wheel',
+  ])('blocks %s only on the active canvas and releases it on off()', (type) => {
+    pad = new SignaturePad(canvas, { lowLatency: true });
+    const gesture = () => new Event(type, { cancelable: true, bubbles: true });
+    const inside = gesture();
+    canvas.dispatchEvent(inside);
+    expect(inside.defaultPrevented).toBe(true);
+    const outside = gesture();
+    document.body.dispatchEvent(outside);
+    expect(outside.defaultPrevented).toBe(false);
+    pad.off();
+    const disabled = gesture();
+    canvas.dispatchEvent(disabled);
+    expect(disabled.defaultPrevented).toBe(false);
+    pad.on();
+    const enabled = gesture();
+    canvas.dispatchEvent(enabled);
+    expect(enabled.defaultPrevented).toBe(true);
+  });
+  it('prevents a canvas click from triggering an enclosing control', () => {
+    pad = new SignaturePad(canvas);
+    const click = jest.fn();
+    document.body.addEventListener('click', click, { once: true });
+    canvas.dispatchEvent(
+      new MouseEvent('click', { bubbles: true, cancelable: true }),
+    );
+    expect(click).not.toHaveBeenCalled();
+    document.body.removeEventListener('click', click);
+  });
+});
