@@ -1,5 +1,5 @@
 /*!
- * Signature Pad v5.1.4-pressure.0 | https://github.com/aniolpages/signature_pad-pressure
+ * Signature Pad v5.1.4-pressure.1 | https://github.com/aniolpages/signature_pad-pressure
  * (c) 2026 Szymon Nowak | Released under the MIT license
  */
 
