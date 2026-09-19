@@ -682,11 +682,15 @@ export default class SignaturePad extends SignatureEventTarget {
       : false;
     const pointGroupOptions = this._getPointGroupOptions(lastPointGroup);
 
+    // Repeated/overlapping coalesced batches must not rewind the stroke.
+    // Keep distinct samples with equal timestamps (browser clock precision).
+    const stale = this.lowLatency && lastPoint && point.time < lastPoint.time;
     // Low-latency mode retains stationary pressure/time samples, but not duplicates.
     const duplicate = lastPoint && point.equals(lastPoint);
     if (
       !lastPoint ||
-      (!duplicate &&
+      (!stale &&
+        !duplicate &&
         ((this.lowLatency && this.minDistance === 0) || !isLastPointTooClose))
     ) {
       const curve = this._addPoint(point, pointGroupOptions);

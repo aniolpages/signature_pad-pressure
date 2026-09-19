@@ -161,6 +161,58 @@ describe('low-latency samples and preview isolation', () => {
     expect(points.map((p) => p.pressure)).toEqual([0.3, 0.2, 0.8]);
     expect(points[2].time - points[1].time).toBe(4);
   });
+  it('renders repeated and overlapping iPad batches only once', () => {
+    // First samples from the iPad diagnostic, translated to a local origin.
+    const batches = [
+      [
+        [11, 105],
+        [12, 109],
+        [13, 113],
+      ],
+      [
+        [14, 117],
+        [15, 121],
+        [16.5, 125],
+        [18, 130],
+      ],
+    ];
+    const draw = (repeat: boolean) => {
+      pad.clear();
+      const ctx = canvas.getContext('2d')!;
+      const arc = jest.spyOn(ctx, 'arc').mockClear();
+      send(event('pointerdown', 10, 0.08, 100));
+      for (const batch of batches) {
+        const samples = batch.map(([x, time]) =>
+          event('pointermove', x, 0.08, time),
+        );
+        const e = samples[samples.length - 1];
+        Object.defineProperty(e, 'getCoalescedEvents', {
+          value: () => samples,
+        });
+        send(e);
+        if (repeat) send(e);
+      }
+      // An overlapping batch must retain its new tail.
+      const tail = event('pointermove', 20, 0.08, 134);
+      Object.defineProperty(tail, 'getCoalescedEvents', {
+        value: () =>
+          repeat
+            ? [
+                event('pointermove', 16.5, 0.08, 125),
+                event('pointermove', 18, 0.08, 130),
+                tail,
+              ]
+            : [tail],
+      });
+      send(tail);
+      send(event('pointerup', 22, 0, 138));
+      const data = JSON.stringify(pad.toData());
+      const drawing = arc.mock.calls.map((call) => [...call]);
+      arc.mockRestore();
+      return { data, drawing, svg: pad.toSVG() };
+    };
+    expect(draw(true)).toEqual(draw(false));
+  });
   it.each([undefined, () => []])(
     'falls back on absent/empty coalescing',
     (getCoalescedEvents) => {
