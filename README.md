@@ -7,6 +7,13 @@ remain compatible; pressure and low latency are opt-in. No new runtime dependenc
 npm install @aniolpages/signature-pad-pressure
 ```
 
+Initial registry publication is currently blocked by the npm account's second
+factor (`EOTP`). Until it is authorized, use the ready-built GitHub release:
+
+```sh
+npm install https://github.com/aniolpages/signature_pad-pressure/releases/download/v5.1.4-pressure.0/aniolpages-signature-pad-pressure-5.1.4-pressure.0.tgz
+```
+
 ## Apple Pencil / pressure-sensitive strokes
 
 ```ts
