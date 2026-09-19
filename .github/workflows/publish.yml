@@ -1,19 +1,23 @@
-name: Tests
+name: Publish npm
 on:
   push:
-    branches: [main, feature/pressure-low-latency]
-  pull_request:
+    tags: ['pressure-v*']
+  workflow_dispatch:
 permissions:
   contents: read
+  id-token: write
 jobs:
-  test:
+  publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '24'
+          registry-url: https://registry.npmjs.org
           cache: npm
+      - run: npm install --global npm@12
       - run: npm ci
       - run: npm test -- --runInBand
       - run: npm run build
+      - run: npm publish --access public --provenance --tag latest

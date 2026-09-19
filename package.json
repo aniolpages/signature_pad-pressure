@@ -1,8 +1,8 @@
 {
-  "name": "signature_pad",
+  "name": "@aniolpages/signature-pad-pressure",
   "description": "Library for drawing smooth signatures.",
-  "version": "5.1.4",
-  "homepage": "https://github.com/szimek/signature_pad",
+  "version": "5.1.4-pressure.0",
+  "homepage": "https://github.com/aniolpages/signature_pad-pressure",
   "author": {
     "name": "Szymon Nowak",
     "email": "szimek@gmail.com",
@@ -21,20 +21,20 @@
     "default": "./dist/signature_pad.umd.js"
   },
   "scripts": {
-    "build": "yarn run lint && yarn run clean && node esbuild.config.js && yarn run emit-types && yarn run update-docs",
-    "clean": "yarn run del dist",
-    "emit-types": "yarn run del dist/types && yarn run tsc src/signature_pad.ts --lib DOM,ES2015 --declaration --declarationDir dist/types --emitDeclarationOnly",
+    "build": "npm run lint && npm run clean && node esbuild.config.js && npm run emit-types && npm run update-docs",
+    "clean": "del dist",
+    "emit-types": "del dist/types && tsc src/signature_pad.ts --lib DOM,ES2015 --declaration --declarationDir dist/types --emitDeclarationOnly --typeRoots ./node_modules/@types --types node",
     "format": "prettier --write {src,tests}/**/*.{js,ts}",
     "lint": "eslint {src,tests}/**/*.ts",
-    "prepublishOnly": "yarn run build",
+    "prepublishOnly": "npm run build",
     "serve": "serve -l 9000 docs",
-    "start": "yarn run build && yarn run serve",
+    "start": "npm run build && npm run serve",
     "test": "jest --coverage",
-    "update-docs": "yarn run cpy 'dist/signature_pad.umd.min.*' docs/js"
+    "update-docs": "cpy 'dist/signature_pad.umd.min.*' docs/js"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/szimek/signature_pad.git"
+    "url": "https://github.com/aniolpages/signature_pad-pressure.git"
   },
   "files": [
     "src",
@@ -79,7 +79,8 @@
       "^\\./bezier\\.js$": "<rootDir>/src/bezier.ts",
       "^\\./point\\.js$": "<rootDir>/src/point.ts",
       "^\\./signature_event_target\\.js$": "<rootDir>/src/signature_event_target.ts",
-      "^\\./throttle\\.js$": "<rootDir>/src/throttle.ts"
+      "^\\./throttle\\.js$": "<rootDir>/src/throttle.ts",
+      "^\\./ink_preview\\.js$": "<rootDir>/src/ink_preview.ts"
     },
     "testEnvironment": "jsdom",
     "testEnvironmentOptions": {
@@ -106,5 +107,7 @@
       "@semantic-release/git"
     ]
   },
-  "packageManager": "yarn@4.18.0"
+  "publishConfig": {
+    "access": "public"
+  }
 }
