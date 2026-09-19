@@ -4,6 +4,7 @@ export interface BasicPoint {
   y: number;
   pressure: number;
   time: number;
+  pressureSupported?: boolean;
 }
 
 export class Point implements BasicPoint {
@@ -12,7 +13,13 @@ export class Point implements BasicPoint {
   public pressure: number;
   public time: number;
 
-  constructor(x: number, y: number, pressure?: number, time?: number) {
+  constructor(
+    x: number,
+    y: number,
+    pressure?: number,
+    time?: number,
+    public pressureSupported?: boolean,
+  ) {
     if (isNaN(x) || isNaN(y)) {
       throw new Error(`Point is invalid: (${x}, ${y})`);
     }
