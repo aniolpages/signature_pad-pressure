@@ -1,5 +1,5 @@
 import Upstream from './upstream-5.1.4.js';
-import Fork from '../dist/signature_pad.js';
+import Fork from '../dist/signature_pad.js?v=5.1.4-pressure.3';
 const $ = (id) => document.getElementById(id);
 const panels = [];
 let frame = 0,

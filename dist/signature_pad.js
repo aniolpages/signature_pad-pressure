@@ -1,5 +1,5 @@
 /*!
- * Signature Pad v5.1.4-pressure.1 | https://github.com/aniolpages/signature_pad-pressure
+ * Signature Pad v5.1.4-pressure.3 | https://github.com/aniolpages/signature_pad-pressure
  * (c) 2026 Szymon Nowak | Released under the MIT license
  */
 
@@ -696,8 +696,9 @@ var SignaturePad = class _SignaturePad extends SignatureEventTarget {
     const lastPoint = lastPoints.length > 0 && lastPoints[lastPoints.length - 1];
     const isLastPointTooClose = lastPoint ? point.distanceTo(lastPoint) <= this.minDistance : false;
     const pointGroupOptions = this._getPointGroupOptions(lastPointGroup);
+    const stale = this.lowLatency && lastPoint && point.time < lastPoint.time;
     const duplicate = lastPoint && point.equals(lastPoint);
-    if (!lastPoint || !duplicate && (this.lowLatency && this.minDistance === 0 || !isLastPointTooClose)) {
+    if (!lastPoint || !stale && !duplicate && (this.lowLatency && this.minDistance === 0 || !isLastPointTooClose)) {
       const curve = this._addPoint(point, pointGroupOptions);
       if (!lastPoint) {
         this._drawDot(point, pointGroupOptions);
