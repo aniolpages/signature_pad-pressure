@@ -7,12 +7,19 @@ remain compatible; pressure and low latency are opt-in. No new runtime dependenc
 npm install @aniolpages/signature-pad-pressure
 ```
 
-Initial registry publication is currently blocked by the npm account's second
-factor (`EOTP`). Until it is authorized, use the ready-built GitHub release:
+[Live demo](https://aniolpages.github.io/signature_pad-pressure/) ·
+[Apple Pencil A/B comparison](https://aniolpages.github.io/signature_pad-pressure/examples/apple-pencil-latency.html)
 
-```sh
-npm install https://github.com/aniolpages/signature_pad-pressure/releases/download/v5.1.4-pressure.1/aniolpages-signature-pad-pressure-5.1.4-pressure.1.tgz
+The live demo enables pressure and low latency. See [its source](docs/js/app.js)
+for canvas resizing, high DPI screens, undo/redo and image exports.
+
+For a script tag, use the fork's UMD build (replace `[version]` with your version):
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/@aniolpages/signature-pad-pressure@[version]/dist/signature_pad.umd.min.js"></script>
 ```
+
+ES modules and CommonJS are also supported.
 
 ## Apple Pencil / pressure-sensitive strokes
 
@@ -61,89 +68,6 @@ Safari Scribble, translucent-ink and physical-device validation limitations.
 [Open the iPad A/B demo](https://aniolpages.github.io/signature_pad-pressure/examples/apple-pencil-latency.html)
 with upstream, fork defaults and low latency, per-feature debug controls and timing
 metrics. [Research, benchmarks and limitations](research/APPLE_PENCIL.md).
-
-## Development and publishing
-
-Use `npm ci`, `npm test -- --runInBand`, and `npm run build`. `package-lock.json`
-is the fork's reproducible install; the untouched upstream yarn lock is retained
-for rebasing. Package: `@aniolpages/signature-pad-pressure`, version
-`5.1.4-pressure.1`, based on upstream 5.1.4. The original author and license remain.
-
-`.github/workflows/publish.yml` uses GitHub OIDC, `id-token: write`, Node 24 and npm
-12. Configure the npm package's trusted publisher with owner `aniolpages`, repository
-`signature_pad-pressure`, workflow `publish.yml`, and no environment. No permanent
-token is embedded. Tags `pressure-v*` (or manual workflow dispatch) publish the checked
-out version; bump the version before another release. The initial release can use
-the already authenticated local npm account.
-
-## Sync with upstream
-
-Upstream calls its default branch **master**, not main. This fork's `main` mirrors
-upstream/master initially; development is on `feature/pressure-low-latency` and
-started at the stable `v5.1.4` tag.
-
-```sh
-git fetch upstream
-git switch main
-git merge --ff-only upstream/master
-git push origin main
-git switch feature/pressure-low-latency
-# Rebase onto the next stable tag after reviewing its changes:
-# git rebase <next-stable-tag>
-npm ci && npm test -- --runInBand && npm run build
-```
-
-Review `git diff upstream/master...HEAD` (upstream has no `main`) and
-`git diff v5.1.4...HEAD`. Source changes are limited to SignaturePad, Point metadata,
-and the preview helper. Test/demo/build/publishing files are separate.
-
----
-
-The original upstream documentation follows. Installation examples below refer
-to upstream; use this fork's scoped package name when installing the fork.
-
-# Signature Pad [![npm](https://badge.fury.io/js/signature_pad.svg)](https://www.npmjs.com/package/signature_pad) [![tests](https://github.com/szimek/signature_pad/actions/workflows/tests.yml/badge.svg)](https://github.com/szimek/signature_pad/actions/workflows/tests.yml) [![](https://data.jsdelivr.com/v1/package/npm/signature_pad/badge?style=rounded)](https://www.jsdelivr.com/package/npm/signature_pad)
-
-Signature Pad is a JavaScript library for drawing smooth signatures. It's HTML5 canvas based and uses variable width Bézier curve interpolation based on [Smoother Signatures](https://developer.squareup.com/blog/smoother-signatures/) post by [Square](https://squareup.com).
-It works in all modern desktop and mobile browsers and doesn't depend on any external libraries.
-
-![Example](https://f.cloud.github.com/assets/9873/268046/9ced3454-8efc-11e2-816e-a9b170a51004.png)
-
-## Demo
-
-[Demo](http://szimek.github.io/signature_pad) works in desktop and mobile browsers. You can check out its [source code](https://github.com/szimek/signature_pad/blob/master/docs/js/app.js) for some tips on how to handle window resize and high DPI screens. You can also find more about the latter in [HTML5 Rocks tutorial](http://www.html5rocks.com/en/tutorials/canvas/hidpi).
-
-### Other demos
-
-- Erase feature: <https://jsfiddle.net/UziTech/xa91e4Lp/>
-- Undo feature: <https://jsfiddle.net/szimek/osenxvjc/>
-
-## Installation
-
-You can install the latest release using npm:
-
-```bash
-npm install --save signature_pad
-```
-
-or Yarn:
-
-```bash
-yarn add signature_pad
-```
-
-You can also add it directly to your page using `<script>` tag:
-
-> [!NOTE]
-> Replace `[version]` with the version you want to use.
-
-```html
-<script src="https://cdn.jsdelivr.net/npm/signature_pad@[version]/dist/signature_pad.umd.min.js"></script>
-```
-
-You can select a different version at [https://www.jsdelivr.com/package/npm/signature_pad](https://www.jsdelivr.com/package/npm/signature_pad).
-
-This library is provided as UMD (Universal Module Definition) and ES6 module.
 
 ## Usage
 
@@ -341,4 +265,19 @@ Demo: <https://jsfiddle.net/szimek/d6a78gwq/>
 
 ## License
 
-Released under the [MIT License](http://www.opensource.org/licenses/MIT).
+Based on [Signature Pad](https://github.com/szimek/signature_pad) by Szymon Nowak.
+Released under the [MIT License](LICENSE).
+
+## Development
+
+```sh
+npm ci
+npm test -- --runInBand
+npm run build
+npm run serve
+```
+
+The local demo runs at http://localhost:9000. `package-lock.json` is the fork's
+reproducible install. Development is on `feature/pressure-low-latency`, based on
+upstream `v5.1.4`; `main` tracks upstream `master`. Review and test upstream changes
+before rebasing onto a newer stable tag.

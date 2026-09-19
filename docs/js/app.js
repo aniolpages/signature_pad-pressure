@@ -16,7 +16,12 @@ const canvas = wrapper.querySelector("canvas");
 const signaturePad = new SignaturePad(canvas, {
   // It's Necessary to use an opaque color when saving image as JPEG;
   // this option can be omitted if only saving as PNG or SVG
-  backgroundColor: 'rgb(255, 255, 255)'
+  backgroundColor: 'rgb(255, 255, 255)',
+  minWidth: 0.4,
+  maxWidth: 2.8,
+  pressureWeight: 0.8,
+  pressureGamma: 0.7,
+  lowLatency: true
 });
 
 function randomColor() {
