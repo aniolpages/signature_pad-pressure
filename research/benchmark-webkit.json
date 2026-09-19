@@ -1,0 +1,88 @@
+{
+  "previewStrategies": {
+    "backingPixels": "1024 × 512",
+    "iterations": 700,
+    "medianBatchMsPerOperation": {
+      "overlay": 0,
+      "partialReadback": 0.75,
+      "redrawHistory": 0.04,
+      "path2dOverlay": 0
+    },
+    "caveat": "Command submission CPU only. Partial readback forces synchronization; other paths may defer rasterization. Path2D reuses a constant path unlike moving ink. No display-latency conclusion."
+  },
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6 Safari/605.1.15",
+  "dpr": 2,
+  "note": "Synthetic event dispatch/Canvas submission CPU; not hardware latency. Normal mode throttles and retains fewer points.",
+  "results": [
+    {
+      "mode": 0,
+      "pointerType": "mouse",
+      "handlerMedianMs": 0,
+      "handlerP95Ms": 0,
+      "points": 11
+    },
+    {
+      "mode": 1,
+      "pointerType": "mouse",
+      "handlerMedianMs": 0,
+      "handlerP95Ms": 0,
+      "points": 11
+    },
+    {
+      "mode": 2,
+      "pointerType": "mouse",
+      "handlerMedianMs": 0,
+      "handlerP95Ms": 0,
+      "points": 302
+    },
+    {
+      "mode": 0,
+      "pointerType": "touch",
+      "handlerMedianMs": 0,
+      "handlerP95Ms": 0,
+      "points": 11
+    },
+    {
+      "mode": 1,
+      "pointerType": "touch",
+      "handlerMedianMs": 0,
+      "handlerP95Ms": 0,
+      "points": 11
+    },
+    {
+      "mode": 2,
+      "pointerType": "touch",
+      "handlerMedianMs": 0,
+      "handlerP95Ms": 0,
+      "points": 302
+    },
+    {
+      "mode": 0,
+      "pointerType": "pen",
+      "handlerMedianMs": 0,
+      "handlerP95Ms": 0,
+      "points": 11
+    },
+    {
+      "mode": 1,
+      "pointerType": "pen",
+      "handlerMedianMs": 0,
+      "handlerP95Ms": 0,
+      "points": 11
+    },
+    {
+      "mode": 2,
+      "pointerType": "pen",
+      "handlerMedianMs": 0,
+      "handlerP95Ms": 0,
+      "points": 302
+    }
+  ],
+  "rafAddedWaitMedianMs": 13,
+  "rafAddedWaitP95Ms": 14,
+  "features": {
+    "coalesced": true,
+    "predicted": true,
+    "raw": false
+  }
+}

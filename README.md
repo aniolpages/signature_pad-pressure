@@ -1,3 +1,100 @@
+# Signature Pad Pressure
+
+Independent MIT fork of **signature_pad 5.1.4**. Default behavior and public API
+remain compatible; pressure and low latency are opt-in. No new runtime dependencies.
+
+```sh
+npm install @aniolpages/signature-pad-pressure
+```
+
+## Apple Pencil / pressure-sensitive strokes
+
+```ts
+import SignaturePad from '@aniolpages/signature-pad-pressure';
+
+const signaturePad = new SignaturePad(canvas, {
+  minWidth: 0.4,
+  maxWidth: 2.8,
+  pressureWeight: 0.8,
+  pressureGamma: 0.7,
+  lowLatency: true,
+});
+```
+
+`pressureWeight` defaults to **0** (original velocity algorithm), is clamped to
+0–1, and blends pressure with velocity. `1` uses pressure only for samples with
+pressure evidence. `pressureGamma` defaults to `1`; finite positive values are
+accepted. Mouse, finger and ambiguous constant-0.5 stylus input retain velocity.
+A recognized stylus must report a positive value different from 0.5 before pressure
+is enabled for that stroke. Raw pressure is still preserved. Details and tradeoffs
+are in [the research notes](research/APPLE_PENCIL.md).
+
+## Low-latency mode
+
+`lowLatency` defaults to **false**. When true it disables throttling, defaults
+`minDistance` to zero, uses Pointer Events where available (including iPad), and
+processes all valid coalesced samples with their individual timestamps and pressure.
+A disposable overlay draws the real tip plus short browser predictions. Real
+samples replace predictions; up/cancel/clear/off remove the overlay. Predictions
+**never enter `toData()`, SVG or raster exports**, even during a stroke. Unsupported
+APIs fall back to normal input and a real-point preview. No zero-latency claim.
+
+New groups retain pressure settings and a completion flag for deterministic
+`fromData()` and `redraw()`. A small optional `pressureSupported` point flag preserves
+the input-detection decision. Existing imported data remains compatible and uses
+its original velocity behavior. A completed opt-in stroke flushes its last real
+segment; there are no synthetic/predicted points in saved data.
+
+Keep normal HiDPI canvas setup from upstream. The automatic overlay assumes a
+stationary canvas with no CSS transforms/padding or special top-layer stacking;
+scroll/resize hides it until the next stroke. Use opaque source-over ink for the
+closest visual match. Preview is disabled for erasers. See the research notes for
+Safari Scribble, translucent-ink and physical-device validation limitations.
+
+[Open the iPad A/B demo](https://aniolpages.github.io/signature_pad-pressure/examples/apple-pencil-latency.html)
+with upstream, fork defaults and low latency, per-feature debug controls and timing
+metrics. [Research, benchmarks and limitations](research/APPLE_PENCIL.md).
+
+## Development and publishing
+
+Use `npm ci`, `npm test -- --runInBand`, and `npm run build`. `package-lock.json`
+is the fork's reproducible install; the untouched upstream yarn lock is retained
+for rebasing. Package: `@aniolpages/signature-pad-pressure`, version
+`5.1.4-pressure.0`, based on upstream 5.1.4. The original author and license remain.
+
+`.github/workflows/publish.yml` uses GitHub OIDC, `id-token: write`, Node 24 and npm
+12. Configure the npm package's trusted publisher with owner `aniolpages`, repository
+`signature_pad-pressure`, workflow `publish.yml`, and no environment. No permanent
+token is embedded. Tags `pressure-v*` (or manual workflow dispatch) publish the checked
+out version; bump the version before another release. The initial release can use
+the already authenticated local npm account.
+
+## Sync with upstream
+
+Upstream calls its default branch **master**, not main. This fork's `main` mirrors
+upstream/master initially; development is on `feature/pressure-low-latency` and
+started at the stable `v5.1.4` tag.
+
+```sh
+git fetch upstream
+git switch main
+git merge --ff-only upstream/master
+git push origin main
+git switch feature/pressure-low-latency
+# Rebase onto the next stable tag after reviewing its changes:
+# git rebase <next-stable-tag>
+npm ci && npm test -- --runInBand && npm run build
+```
+
+Review `git diff upstream/master...HEAD` (upstream has no `main`) and
+`git diff v5.1.4...HEAD`. Source changes are limited to SignaturePad, Point metadata,
+and the preview helper. Test/demo/build/publishing files are separate.
+
+---
+
+The original upstream documentation follows. Installation examples below refer
+to upstream; use this fork's scoped package name when installing the fork.
+
 # Signature Pad [![npm](https://badge.fury.io/js/signature_pad.svg)](https://www.npmjs.com/package/signature_pad) [![tests](https://github.com/szimek/signature_pad/actions/workflows/tests.yml/badge.svg)](https://github.com/szimek/signature_pad/actions/workflows/tests.yml) [![](https://data.jsdelivr.com/v1/package/npm/signature_pad/badge?style=rounded)](https://www.jsdelivr.com/package/npm/signature_pad)
 
 Signature Pad is a JavaScript library for drawing smooth signatures. It's HTML5 canvas based and uses variable width Bézier curve interpolation based on [Smoother Signatures](https://developer.squareup.com/blog/smoother-signatures/) post by [Square](https://squareup.com).

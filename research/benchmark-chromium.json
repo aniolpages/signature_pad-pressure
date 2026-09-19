@@ -1,0 +1,110 @@
+{
+  "previewStrategies": {
+    "backingPixels": "1024 × 512",
+    "iterations": 700,
+    "medianBatchMsPerOperation": {
+      "overlay": 0.0010000002384185792,
+      "partialReadback": 0.029000000953674318,
+      "redrawHistory": 0.038000000715255736,
+      "path2dOverlay": 0
+    },
+    "caveat": "Command submission CPU only. Partial readback forces synchronization; other paths may defer rasterization. Path2D reuses a constant path unlike moving ink. No display-latency conclusion."
+  },
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+  "dpr": 2,
+  "note": "Synthetic event dispatch/Canvas submission CPU; not hardware latency. Normal mode throttles and retains fewer points.",
+  "results": [
+    {
+      "mode": 0,
+      "pointerType": "mouse",
+      "handlerMedianMs": 0,
+      "handlerP95Ms": 0.10000002384185791,
+      "points": 10
+    },
+    {
+      "mode": 1,
+      "pointerType": "mouse",
+      "handlerMedianMs": 0,
+      "handlerP95Ms": 0.10000002384185791,
+      "points": 9
+    },
+    {
+      "mode": 2,
+      "pointerType": "mouse",
+      "handlerMedianMs": 0.09999990463256836,
+      "handlerP95Ms": 0.19999992847442627,
+      "points": 302
+    },
+    {
+      "mode": 0,
+      "pointerType": "touch",
+      "handlerMedianMs": 0,
+      "handlerP95Ms": 0.10000002384185791,
+      "points": 10
+    },
+    {
+      "mode": 1,
+      "pointerType": "touch",
+      "handlerMedianMs": 0,
+      "handlerP95Ms": 0.10000002384185791,
+      "points": 11
+    },
+    {
+      "mode": 2,
+      "pointerType": "touch",
+      "handlerMedianMs": 0.09999990463256836,
+      "handlerP95Ms": 0.10000002384185791,
+      "points": 302
+    },
+    {
+      "mode": 0,
+      "pointerType": "pen",
+      "handlerMedianMs": 0,
+      "handlerP95Ms": 0.10000002384185791,
+      "points": 11
+    },
+    {
+      "mode": 1,
+      "pointerType": "pen",
+      "handlerMedianMs": 0,
+      "handlerP95Ms": 0.10000002384185791,
+      "points": 11
+    },
+    {
+      "mode": 2,
+      "pointerType": "pen",
+      "handlerMedianMs": 0.09999990463256836,
+      "handlerP95Ms": 0.10000002384185791,
+      "points": 302
+    }
+  ],
+  "rafAddedWaitMedianMs": 13.199999928474426,
+  "rafAddedWaitP95Ms": 14,
+  "features": {
+    "coalesced": true,
+    "predicted": true,
+    "raw": true
+  },
+  "profile": {
+    "Layout": {
+      "count": 15,
+      "totalMs": 23.843000000000004
+    },
+    "UpdateLayoutTree": {
+      "count": 15,
+      "totalMs": 0.5630000000000002
+    },
+    "MinorGC": {
+      "count": 8,
+      "totalMs": 4.372
+    },
+    "MajorGC": {
+      "count": 0,
+      "totalMs": 0
+    },
+    "Paint": {
+      "count": 25,
+      "totalMs": 3.7789999999999995
+    }
+  }
+}
