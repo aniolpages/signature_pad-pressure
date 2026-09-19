@@ -1,5 +1,5 @@
 /*!
- * Signature Pad v5.1.4-pressure.4 | https://github.com/aniolpages/signature_pad-pressure
+ * Signature Pad v5.1.4-pressure.5 | https://github.com/aniolpages/signature_pad-pressure
  * (c) 2026 Szymon Nowak | Released under the MIT license
  */
 
@@ -256,6 +256,20 @@ var InkPreview = class {
 };
 
 // src/signature_pad.ts
+var canvasDefaultEvents = [
+  "touchstart",
+  "touchmove",
+  "touchend",
+  "gesturestart",
+  "gesturechange",
+  "gestureend",
+  "selectstart",
+  "dragstart",
+  "contextmenu",
+  "click",
+  "dblclick",
+  "wheel"
+];
 var SignaturePad = class _SignaturePad extends SignatureEventTarget {
   /* tslint:enable: variable-name */
   constructor(canvas, options = {}) {
@@ -315,6 +329,10 @@ var SignaturePad = class _SignaturePad extends SignatureEventTarget {
   _preview;
   _sampleRect;
   _pressureObserved = false;
+  _preventCanvasDefault = (event) => {
+    if (event.cancelable) event.preventDefault();
+    if (!event.type.startsWith("touch")) event.stopPropagation();
+  };
   _ctx;
   _drawingStroke = false;
   _isEmpty = true;
@@ -400,6 +418,12 @@ var SignaturePad = class _SignaturePad extends SignatureEventTarget {
     this.canvas.style.msTouchAction = "none";
     this.canvas.style.userSelect = "none";
     this.canvas.style.webkitUserSelect = "none";
+    this.canvas.style.setProperty("-webkit-touch-callout", "none");
+    for (const type of canvasDefaultEvents) {
+      this.canvas.addEventListener(type, this._preventCanvasDefault, {
+        passive: false
+      });
+    }
     const isIOS = /Macintosh/.test(navigator.userAgent) && "ontouchstart" in document;
     if (window.PointerEvent && (!isIOS || this.lowLatency)) {
       this._handlePointerEvents();
@@ -418,6 +442,10 @@ var SignaturePad = class _SignaturePad extends SignatureEventTarget {
     this.canvas.style.msTouchAction = "auto";
     this.canvas.style.userSelect = "auto";
     this.canvas.style.webkitUserSelect = "auto";
+    this.canvas.style.removeProperty("-webkit-touch-callout");
+    for (const type of canvasDefaultEvents) {
+      this.canvas.removeEventListener(type, this._preventCanvasDefault);
+    }
     this.canvas.removeEventListener("pointerdown", this._handlePointerDown);
     this.canvas.removeEventListener("mousedown", this._handleMouseDown);
     this.canvas.removeEventListener("touchstart", this._handleTouchStart);
