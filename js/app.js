@@ -21,6 +21,7 @@ const signaturePad = new SignaturePad(canvas, {
   maxWidth: 2.8,
   pressureWeight: 0.8,
   pressureGamma: 0.7,
+  pressureMax: 0.5,
   lowLatency: true
 });
 

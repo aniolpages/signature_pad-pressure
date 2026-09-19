@@ -9,7 +9,7 @@
 </head>
 <body><main>
 <h1>Signature Pad Pressure · prova de latència</h1>
-<p class="hint">Versió 5.1.4-pressure.3 · filtre de mostres coalescents repetides.</p>
+<p class="hint">Versió 5.1.4-pressure.4 · pressió màxima calibrada a 0,5.</p>
 <p><a href="https://aniolpages.github.io/signature_pad-pressure/">Demo de signatures</a> · <a href="https://github.com/aniolpages/signature_pad-pressure">Codi font del fork</a></p>
 <p>Signa als tres quadres per comparar upstream 5.1.4, el fork compatible i el mode de baixa latència. Obre aquesta pàgina amb HTTPS a l’iPad. Les mètriques mesuren l’entrada a JavaScript i l’enviament d’ordres a Canvas; <strong>no mesuren quan s’encenen els píxels</strong>.</p>
 <div class="controls" id="controls">
@@ -22,7 +22,7 @@
 <label><input id="debug" type="checkbox">Mostres de depuració</label>
 <button id="clear">Neteja</button><button id="export">Mostra diagnòstic del traç</button><button id="bench">Executa benchmark sintètic</button>
 </div>
-<p class="hint">Els controls afecten només el tercer quadre i netegen els traços. Bézier desactivat dibuixa segments rectes de depuració. Pressió: pes 0,8, gamma 0,7. Resolució nativa del dispositiu, sense reducció de qualitat.</p>
+<p class="hint">Els controls afecten només el tercer quadre i netegen els traços. Bézier desactivat dibuixa segments rectes de depuració. Pressió: rang 0–0,5, pes 0,8, gamma 0,7. Resolució nativa del dispositiu, sense reducció de qualitat.</p>
 <p class="legend"><span>● Event real</span><span>● Mostra coalesced</span><span>● Predicció</span></p>
 <div class="panels" id="panels"></div>
 <section id="diagnostic" hidden aria-labelledby="diagnostic-title">
@@ -35,4 +35,4 @@
 </section>
 <pre id="results" aria-live="polite"></pre>
 <p class="hint">Cap traç s’envia a un servidor. El benchmark genera mouse, touch i pen sintètics: no substitueix una prova amb Apple Pencil. La freqüència d’events depèn del dispositiu. Canviar de pestanya o moure la pàgina interromp la prova visual.</p>
-</main><script type="module" src="./latency-demo.js?v=5.1.4-pressure.3"></script></body></html>
+</main><script type="module" src="./latency-demo.js?v=5.1.4-pressure.4"></script></body></html>

@@ -1,5 +1,5 @@
 /*!
- * Signature Pad v5.1.4-pressure.3 | https://github.com/aniolpages/signature_pad-pressure
+ * Signature Pad v5.1.4-pressure.4 | https://github.com/aniolpages/signature_pad-pressure
  * (c) 2026 Szymon Nowak | Released under the MIT license
  */
 
@@ -263,6 +263,7 @@ var SignaturePad = class _SignaturePad extends SignatureEventTarget {
     this.canvas = canvas;
     this.pressureWeight = Number.isFinite(options.pressureWeight) ? Math.max(0, Math.min(1, options.pressureWeight)) : 0;
     this.pressureGamma = Number.isFinite(options.pressureGamma) && options.pressureGamma > 0 ? options.pressureGamma : 1;
+    this.pressureMax = Number.isFinite(options.pressureMax) && options.pressureMax > 0 ? options.pressureMax : 1;
     this.lowLatency = options.lowLatency ?? false;
     this.velocityFilterWeight = options.velocityFilterWeight || 0.7;
     this.minWidth = options.minWidth || 0.5;
@@ -297,6 +298,7 @@ var SignaturePad = class _SignaturePad extends SignatureEventTarget {
   // Public stuff
   pressureWeight;
   pressureGamma;
+  pressureMax;
   lowLatency;
   dotSize;
   minWidth;
@@ -605,7 +607,8 @@ var SignaturePad = class _SignaturePad extends SignatureEventTarget {
     return {
       ...(group ? group.pressureWeight : this.pressureWeight) ? {
         pressureWeight: group ? group.pressureWeight : this.pressureWeight,
-        pressureGamma: group ? group.pressureGamma ?? 1 : this.pressureGamma
+        pressureGamma: group ? group.pressureGamma ?? 1 : this.pressureGamma,
+        pressureMax: group ? group.pressureMax ?? 1 : this.pressureMax
       } : {},
       penColor: group && "penColor" in group ? group.penColor : this.penColor,
       dotSize: group && "dotSize" in group ? group.dotSize : this.dotSize,
@@ -859,7 +862,11 @@ var SignaturePad = class _SignaturePad extends SignatureEventTarget {
       return velocityWidth;
     }
     const gamma = Number.isFinite(options.pressureGamma) && options.pressureGamma > 0 ? options.pressureGamma : 1;
-    const pressure = Math.pow(Math.max(0, Math.min(1, point.pressure)), gamma);
+    const pressureMax = Number.isFinite(options.pressureMax) && options.pressureMax > 0 ? options.pressureMax : 1;
+    const pressure = Math.pow(
+      Math.max(0, Math.min(1, point.pressure / pressureMax)),
+      gamma
+    );
     const width = options.minWidth + pressure * (options.maxWidth - options.minWidth);
     return Math.max(
       options.minWidth,
