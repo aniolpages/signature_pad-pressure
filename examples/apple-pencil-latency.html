@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="ca">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Apple Pencil · Signature Pad A/B</title>
+<style>
+*{box-sizing:border-box}body{font:16px/1.5 system-ui,sans-serif;margin:0;background:#f3f5f8;color:#182132}main{max-width:1400px;margin:auto;padding:24px}h1{margin:0;font-size:clamp(24px,4vw,38px)}p{max-width:90ch}.controls{display:flex;flex-wrap:wrap;gap:12px 20px;margin:20px 0}label{display:inline-flex;gap:7px;align-items:center}button,select{font:inherit;padding:8px 14px;border:1px solid #bac3d1;border-radius:8px;background:white;color:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible{outline:3px solid #356ee6}.panels{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}article{background:white;border:1px solid #dce1e8;border-radius:12px;overflow:hidden}h2{font-size:18px;margin:14px 16px}.surface{height:300px;position:relative;background:linear-gradient(transparent 49px,#f0f2f5 50px);background-size:50px 50px}.surface canvas{display:block;width:100%;height:100%;touch-action:none}.surface .debug{position:absolute;inset:0;pointer-events:none}pre{white-space:pre-wrap;font:12px/1.65 ui-monospace,monospace;margin:16px;min-height:240px}.hint{color:#53637a;font-size:14px}.legend span{margin-right:20px}.legend span:nth-child(1){color:#2563eb}.legend span:nth-child(2){color:#d97706}.legend span:nth-child(3){color:#be185d}#results{margin:16px 0;min-height:0}@media(max-width:900px){.panels{grid-template-columns:1fr}.surface{height:260px}pre{min-height:0}} 
+</style>
+</head>
+<body><main>
+<h1>Apple Pencil · prova de latència</h1>
+<p>Signa als tres quadres per comparar upstream 5.1.4, el fork compatible i el mode de baixa latència. Obre aquesta pàgina amb HTTPS a l’iPad. Les mètriques mesuren l’entrada a JavaScript i l’enviament d’ordres a Canvas; <strong>no mesuren quan s’encenen els píxels</strong>.</p>
+<div class="controls" id="controls">
+<label><input id="pressure" type="checkbox" checked>Pressió</label>
+<label><input id="low" type="checkbox" checked>Baixa latència</label>
+<label><input id="coalesced" type="checkbox" checked>Coalesced</label>
+<label><input id="predicted" type="checkbox" checked>Prediccions</label>
+<label><input id="smoothing" type="checkbox" checked>Bézier</label>
+<label><input id="preview" type="checkbox" checked>Punta provisional</label>
+<label><input id="debug" type="checkbox">Mostres de depuració</label>
+<button id="clear">Neteja</button><button id="bench">Executa benchmark sintètic</button>
+</div>
+<p class="hint">Els controls afecten només el tercer quadre i netegen els traços. Bézier desactivat dibuixa segments rectes de depuració. Pressió: pes 0,8, gamma 0,7. Resolució nativa del dispositiu, sense reducció de qualitat.</p>
+<p class="legend"><span>● Event real</span><span>● Mostra coalesced</span><span>● Predicció</span></p>
+<div class="panels" id="panels"></div>
+<pre id="results" aria-live="polite"></pre>
+<p class="hint">Cap traç s’envia a un servidor. El benchmark genera mouse, touch i pen sintètics: no substitueix una prova amb Apple Pencil. La freqüència d’events depèn del dispositiu. Canviar de pestanya o moure la pàgina interromp la prova visual.</p>
+</main><script type="module" src="./latency-demo.js"></script></body></html>
