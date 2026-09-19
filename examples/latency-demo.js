@@ -1,5 +1,5 @@
 import Upstream from './upstream-5.1.4.js';
-import Fork from '../dist/signature_pad.js?v=5.1.4-pressure.3';
+import Fork from '../dist/signature_pad.js?v=5.1.4-pressure.4';
 const $ = (id) => document.getElementById(id);
 const panels = [];
 let frame = 0,
@@ -54,6 +54,7 @@ function reset() {
             maxWidth: 2.8,
             pressureWeight: $('pressure').checked ? 0.8 : 0,
             pressureGamma: 0.7,
+            pressureMax: 0.5,
             lowLatency: $('low').checked,
           }
         : {},

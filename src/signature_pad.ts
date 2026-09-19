@@ -45,6 +45,7 @@ export interface ToSVGOptions {
 export interface PointGroupOptions {
   pressureWeight?: number;
   pressureGamma?: number;
+  pressureMax?: number;
   dotSize: number;
   minWidth: number;
   maxWidth: number;
@@ -76,6 +77,7 @@ export default class SignaturePad extends SignatureEventTarget {
   // Public stuff
   public pressureWeight: number;
   public pressureGamma: number;
+  public pressureMax: number;
   public readonly lowLatency: boolean;
   public dotSize: number;
   public minWidth: number;
@@ -117,6 +119,10 @@ export default class SignaturePad extends SignatureEventTarget {
     this.pressureGamma =
       Number.isFinite(options.pressureGamma) && options.pressureGamma! > 0
         ? options.pressureGamma!
+        : 1;
+    this.pressureMax =
+      Number.isFinite(options.pressureMax) && options.pressureMax! > 0
+        ? options.pressureMax!
         : 1;
     this.lowLatency = options.lowLatency ?? false;
     this.velocityFilterWeight = options.velocityFilterWeight || 0.7;
@@ -556,6 +562,7 @@ export default class SignaturePad extends SignatureEventTarget {
             pressureGamma: group
               ? (group.pressureGamma ?? 1)
               : this.pressureGamma,
+            pressureMax: group ? (group.pressureMax ?? 1) : this.pressureMax,
           }
         : {}),
       penColor: group && 'penColor' in group ? group.penColor : this.penColor,
@@ -918,7 +925,14 @@ export default class SignaturePad extends SignatureEventTarget {
       Number.isFinite(options.pressureGamma) && options.pressureGamma! > 0
         ? options.pressureGamma!
         : 1;
-    const pressure = Math.pow(Math.max(0, Math.min(1, point.pressure)), gamma);
+    const pressureMax =
+      Number.isFinite(options.pressureMax) && options.pressureMax! > 0
+        ? options.pressureMax!
+        : 1;
+    const pressure = Math.pow(
+      Math.max(0, Math.min(1, point.pressure / pressureMax)),
+      gamma,
+    );
     const width =
       options.minWidth + pressure * (options.maxWidth - options.minWidth);
     return Math.max(

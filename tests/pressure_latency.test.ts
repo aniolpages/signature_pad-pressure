@@ -73,6 +73,38 @@ describe('pressure', () => {
       expected,
     );
   });
+  it.each([0, 0.1, 0.25, 0.5, 0.8])(
+    'normalizes pressure %s before gamma and velocity blending',
+    (pressure) => {
+      pad = new SignaturePad(canvas);
+      const settings = { ...options, pressureWeight: 0.8, pressureGamma: 0.7 };
+      expect(
+        pad['_pressureWidth'](2, new Point(1, 1, pressure), {
+          ...settings,
+          pressureMax: 0.5,
+        }),
+      ).toBe(
+        pad['_pressureWidth'](
+          2,
+          new Point(1, 1, Math.min(1, pressure * 2)),
+          settings,
+        ),
+      );
+    },
+  );
+  it.each([0, -1, NaN, Infinity])(
+    'ignores invalid pressureMax %s',
+    (pressureMax) => {
+      pad = new SignaturePad(canvas, { pressureMax });
+      expect(pad.pressureMax).toBe(1);
+      expect(
+        pad['_pressureWidth'](2, new Point(1, 1, 0.25), {
+          ...options,
+          pressureMax,
+        }),
+      ).toBe(pad['_pressureWidth'](2, new Point(1, 1, 0.25), options));
+    },
+  );
   it('blends velocity and pressure', () => {
     pad = new SignaturePad(canvas);
     expect(
@@ -114,7 +146,11 @@ describe('pressure', () => {
     },
   );
   it('preserves pressure and replay metadata through JSON/fromData/redraw', () => {
-    pad = new SignaturePad(canvas, { pressureWeight: 0.8, lowLatency: true });
+    pad = new SignaturePad(canvas, {
+      pressureWeight: 0.8,
+      pressureMax: 0.5,
+      lowLatency: true,
+    });
     stroke();
     const data = JSON.parse(JSON.stringify(pad.toData()));
     const svg = pad.toSVG();
@@ -123,6 +159,8 @@ describe('pressure', () => {
     ]);
     pad.clear();
     pad.pressureWeight = 0;
+    pad.pressureMax = 1;
+    expect(data[0].pressureMax).toBe(0.5);
     pad.fromData(data);
     expect(pad.toSVG()).toBe(svg);
     pad.redraw();

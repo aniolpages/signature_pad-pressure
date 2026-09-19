@@ -31,6 +31,7 @@ const signaturePad = new SignaturePad(canvas, {
   maxWidth: 2.8,
   pressureWeight: 0.8,
   pressureGamma: 0.7,
+  pressureMax: 0.5,
   lowLatency: true,
 });
 ```
@@ -38,7 +39,10 @@ const signaturePad = new SignaturePad(canvas, {
 `pressureWeight` defaults to **0** (original velocity algorithm), is clamped to
 0–1, and blends pressure with velocity. `1` uses pressure only for samples with
 pressure evidence. `pressureGamma` defaults to `1`; finite positive values are
-accepted. Mouse, finger and ambiguous constant-0.5 stylus input retain velocity.
+accepted. `pressureMax` defaults to `1`; set it to `0.5` to map raw pressure
+0–0.5 onto the full pressure range, saturating above 0.5. Normalization happens
+before gamma and velocity blending; stored pressure remains raw. The demos use
+`pressureMax: 0.5`. Mouse, finger and ambiguous constant-0.5 stylus input retain velocity.
 A recognized stylus must report a positive value different from 0.5 before pressure
 is enabled for that stroke. Raw pressure is still preserved. Details and tradeoffs
 are in [the research notes](research/APPLE_PENCIL.md).
