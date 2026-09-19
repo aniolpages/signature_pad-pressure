@@ -19,11 +19,19 @@
 <label><input id="smoothing" type="checkbox" checked>Bézier</label>
 <label><input id="preview" type="checkbox" checked>Punta provisional</label>
 <label><input id="debug" type="checkbox">Mostres de depuració</label>
-<button id="clear">Neteja</button><button id="export">Desa diagnòstic del traç</button><button id="bench">Executa benchmark sintètic</button>
+<button id="clear">Neteja</button><button id="export">Mostra diagnòstic del traç</button><button id="bench">Executa benchmark sintètic</button>
 </div>
 <p class="hint">Els controls afecten només el tercer quadre i netegen els traços. Bézier desactivat dibuixa segments rectes de depuració. Pressió: pes 0,8, gamma 0,7. Resolució nativa del dispositiu, sense reducció de qualitat.</p>
 <p class="legend"><span>● Event real</span><span>● Mostra coalesced</span><span>● Predicció</span></p>
 <div class="panels" id="panels"></div>
+<section id="diagnostic" hidden aria-labelledby="diagnostic-title">
+<h2 id="diagnostic-title">Diagnòstic del traç</h2>
+<p>Pots copiar les dades i enganxar-les al xat, o descarregar-les com a fitxer JSON.</p>
+<textarea id="diagnostic-text" readonly aria-label="Dades de diagnòstic" rows="8" style="width:100%;font:14px ui-monospace,monospace"></textarea>
+<button id="copy-diagnostic">Copia les dades</button>
+<a id="download-diagnostic" download="signature-pad-diagnostic.json">Descarrega el JSON</a>
+<p id="diagnostic-status" role="status"></p>
+</section>
 <pre id="results" aria-live="polite"></pre>
 <p class="hint">Cap traç s’envia a un servidor. El benchmark genera mouse, touch i pen sintètics: no substitueix una prova amb Apple Pencil. La freqüència d’events depèn del dispositiu. Canviar de pestanya o moure la pàgina interromp la prova visual.</p>
-</main><script type="module" src="./latency-demo.js"></script></body></html>
+</main><script type="module" src="./latency-demo.js?v=diagnostic-2"></script></body></html>
