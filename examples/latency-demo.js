@@ -89,6 +89,7 @@ function reset() {
       p.stats.inputToSubmit = end - e.detail.event.timeStamp;
     });
     p.stats = { count: 0, coalesced: 0, started: performance.now() };
+    p.samples = [];
   });
   renderStats();
 }
@@ -111,6 +112,14 @@ for (const [index, p] of panels.entries()) {
       predicted: predicted.length,
       perEvent: c.length,
     });
+    if (index === 2) {
+      if (e.type === 'pointerdown') p.samples = [];
+      const sample = (point) => ({
+        x: point.clientX, y: point.clientY, pressure: point.pressure,
+        time: point.timeStamp, pointerType: point.pointerType,
+      });
+      p.samples.push({ event: sample(e), coalesced: c.map(sample) });
+    }
     p.stats.count++;
     p.stats.coalesced += c.length;
     if ($('debug').checked) {
@@ -156,6 +165,25 @@ function renderStats() {
 setInterval(renderStats, 250);
 $('controls').addEventListener('change', reset);
 $('clear').onclick = reset;
+$('export').onclick = () => {
+  const output = {
+    userAgent: navigator.userAgent,
+    dpr: devicePixelRatio,
+    controls: Object.fromEntries(
+      [...document.querySelectorAll('#controls input')].map((input) => [input.id, input.checked]),
+    ),
+    groups: panels[2].pad.toData(),
+    lastStrokeEvents: panels[2].samples,
+  };
+  const url = URL.createObjectURL(new Blob([JSON.stringify(output, null, 2)], { type: 'application/json' }));
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'signature-pad-diagnostic.json';
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+};
 window.addEventListener('resize', reset);
 reset();
 
