@@ -179,3 +179,26 @@ with coalescing, predictions, preview and smoothing individually disabled. Keep
 DPR native and record device, OS, refresh rate and power mode. The benchmark button
 also runs the immediate/rAF and canvas-strategy comparisons. Debug sample colors
 are separate and are never included in exported signature data.
+
+## Final validation and size
+
+`npm ci`, `npm test -- --runInBand` (96 tests, 11 original snapshots), lint,
+TypeScript declarations, four bundle builds and `npm pack --dry-run` passed.
+Chromium and WebKit checks compared rendered PNGs before/after replay for 2, 3
+and 7-point strokes, tested ordinary mouse drawing, and compared default-mode
+pixels against upstream with the same clock. Separate paired strokes with and
+without predicted input produced identical PNG, SVG and JSON, with nonempty ink.
+Desktop (1400/1440 px) and tablet-width (820 px) layouts were inspected. Browser
+plugin was not available; local Playwright was used, outside runtime dependencies.
+
+| Bundle | Upstream bytes / gzip | Fork bytes / gzip |
+| --- | ---: | ---: |
+| ESM minified | 15,598 / 4,660 | 21,017 / 6,095 |
+| UMD minified | 16,703 / 5,129 | 22,152 / 6,568 |
+
+Gzip measured with Python gzip, mtime 0. ESM overhead is 5,419 bytes raw / 1,435
+bytes gzip. Reports exclude source maps; package contents retain upstream's maps
+and docs. No new runtime dependencies. Further microbenchmark repetitions varied
+(partial readback 0.75–0.94 ms on WebKit, low-mode p95 0–1 ms at its clock
+resolution); the committed JSON files are one explicitly identified run, not a
+statistically rigorous device study.
